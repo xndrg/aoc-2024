@@ -1,9 +1,12 @@
+// std=C++20
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unordered_map>
 
 #define COL_LEN 1000
+// NOTE: Better to use linked list, because we need to find elements in second_col
 static int first_col[COL_LEN];
 static int second_col[COL_LEN];
 
@@ -30,30 +33,33 @@ void read_columns_from_file(int *first, int *second, const char *file_path)
     }
 }
 
-int cmp(const void *first, const void *second) 
+int main()
 {
-    int f = *((int*)first);
-    int s = *((int*)second);
-    if (f > s) return  1;
-    if (f < s) return -1;
-    return 0;
-}
-
-int main(void)
-{
-    const char *file_path = "day1-input.txt";
+    const char *file_path = "input.txt";
     read_columns_from_file(first_col, second_col, file_path);
 
-    qsort(first_col, COL_LEN, sizeof(int), cmp);
-    qsort(second_col, COL_LEN, sizeof(int), cmp);
-
+    std::unordered_map<int, int> map;
     int result = 0;
-    for (size_t i = 0; i < 1000; ++i) {
-	int d = abs(first_col[i] - second_col[i]);
-	result += d;
+    
+    for (size_t i = 0; i < COL_LEN; ++i) {
+	int first = first_col[i];
+	for (size_t j = 0; j < COL_LEN; ++j) {
+	    int second = second_col[j];
+	    if (first == second) {
+		if (map.contains(first)) {
+		    map[first] += 1;
+		} else {
+		    map[first] = 1;
+		}
+	    }
+	}
     }
 
-    printf("Result is: %d\n", result);
+    for (const auto &[k, v] : map) {
+	result += k * v;
+    }
+
+    printf("Result is: %d", result);
     
     return 0;
 }
