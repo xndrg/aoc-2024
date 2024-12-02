@@ -6,7 +6,6 @@
 #include <unordered_map>
 
 #define COL_LEN 1000
-// NOTE: Better to use linked list, because we need to find elements in second_col
 static int first_col[COL_LEN];
 static int second_col[COL_LEN];
 
