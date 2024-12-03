@@ -62,7 +62,6 @@ int main(void)
 
 	Inst inst = {n1, n2};
 	program[program_cur++] = inst;
-
     }
 
  end:
