@@ -5,7 +5,21 @@
 #include <vector>
 #include <iostream>
 
-bool validate(std::vector<int> record)
+bool validate(std::vector<int> record, bool flag);
+
+bool try_remove_level(std::vector<int> record)
+{
+    for (int i = 0; i < record.size(); ++i) {
+	int tmp = record[i];
+	record.erase(record.begin() + i);
+	if (validate(record, false)) return true;
+	record.insert(record.begin() + i, tmp);
+    }
+
+    return false;
+}
+
+bool validate(std::vector<int> record, bool flag)
 {
     bool inc = record[0] < record[1];
 
@@ -16,11 +30,13 @@ bool validate(std::vector<int> record)
 
 	// YES IM CRAZY IDC
 	if (!(((a < b) && inc) || (!(a < b) && !inc))) {
-	    return false;
+	    if (flag) return try_remove_level(record);
+	    else return false;
 	}
 
 	if (d < 1 || d > 3) {
-	    return false;
+	    if (flag) return try_remove_level(record);
+	    else return false;
 	}
     }
 
@@ -54,7 +70,7 @@ int main()
 	    tmp = endptr;
 	}
 
-	if (validate(list)) {
+	if (validate(list, true)) {
 	    result += 1;
 	}
     }
